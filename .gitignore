@@ -20,3 +20,6 @@ Thumbs.db
 *.log
 *.lib
 *.sbr
+obj
+bin
+packages

@@ -1,0 +1,36 @@
+﻿#task-regist-button{
+    width: 100px;
+    height: 30px;
+}
+button:hover{
+    background:#f158ac;
+}
+ul {
+    list-style-type: none;
+    padding-left:0;
+}
+ul.regist-task > li:nth-child(n+1) {
+    margin: 10px 0 10px 0;
+}
+
+.regist-task-list-item p{
+    margin:0;
+    padding:10px 0 10px 0;
+    height:20px;
+}
+
+.regist-task-list-item:hover {
+    background: #c9e7f5;
+}
+    
+    .regist-task-list-item:not(:last-child) {
+    border-bottom: solid 1px black;
+}
+
+#task-detail .task-detail-caption {
+    font-weight: bold;
+}
+
+#task-detail .task-detail-value {
+    padding-bottom: 10px;
+}

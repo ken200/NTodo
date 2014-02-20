@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "Shared/_Layout.cshtml";
+}
+
+@section Main{
+    <h3>タスク登録</h3>
+    <ul class="regist-task">
+        <li><div class="title">タイトル</div><input type="text" style="width:500px;" /></li>
+        <li><div class="title">詳細</div><textarea rows="10" style="width:500px;"></textarea></li>
+        <li><div class="title">期限</div><input type="datetime-local" /></li>
+        <li><button id="task-regist-button">登録</button></li>
+    </ul>
+}
+
+@section RegistTaskList{
+    <h3>タスク一覧</h3>
+    <div style="overflow-y:scroll;height:280px;width:800px;border:solid 1px black;">
+        <ul>
+            @foreach(NTodo.TodoItem item in @Model)
+            {
+                @{
+                    var overLimit = item.Limit > new DateTime(2014,2,14);
+                    var overLimitCSS = overLimit ? "color:red;" : "";
+                }
+                <li class="regist-task-list-item">
+                    <p>
+                    <input type="checkbox" style="margin-right:30px;" />
+                    <span style="@(overLimitCSS)">@(item.Title)</span>
+                    </p>
+                    <input type="hidden" name="taskid" value="@(item.Id)"></input>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@section TaskDetail{
+    <h3>詳細<button id="comment-add-button" style="margin-left:250px;">コメント追加</button></h3>
+    <ul id="task-detail">
+        @*タイトル*@
+        <li class="task-detail-caption">タイトル</li>
+        <li class="task-detail-value"></li>
+        @*詳細*@
+        <li class="task-detail-caption">詳細</li>
+        <li class="task-detail-value"></li>
+        @*期限*@
+        <li class="task-detail-caption">期限</li>
+        <li class="task-detail-value"></li>
+        @*コメント*@
+        <li class="task-detail-caption">コメント</li>
+        <li class="task-detail-value"></li>
+        <input type="hidden" name="task-detail-id" id="task-detail-id" />
+    </ul>
+
+    @*コメント登録ダイアログ*@
+    <div id="dialog-form" title="コメントの追加">
+        <input type="text" id="comment" style="width:100%;" />
+    </div>
+}
