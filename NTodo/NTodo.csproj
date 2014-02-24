@@ -93,6 +93,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\js\views.js" />
     <Content Include="packages.config" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

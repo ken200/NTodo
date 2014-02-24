@@ -20,14 +20,19 @@
             {
                 @{
                     var overLimit = item.Limit > new DateTime(2014,2,14);
-                    var overLimitCSS = overLimit ? "color:red;" : "";
+                    var colorCss = overLimit ? "color:red;" : "";
                 }
                 <li class="regist-task-list-item">
                     <p>
                     <input type="checkbox" style="margin-right:30px;" />
-                    <span style="@(overLimitCSS)">@(item.Title)</span>
+                    <span style="@(colorCss)">@(item.Title)</span>
                     </p>
-                    <input type="hidden" name="taskid" value="@(item.Id)"></input>
+                    @*タスク情報*@
+                    <input type="hidden" 
+                           name="task@(item.Id)info" value="@(item.Id)" 
+                           data-title="@(item.Title)"
+                           data-limit="@(item.Limit)"
+                           data-finished="@(item.Finished)" />
                 </li>
             }
         </ul>
@@ -37,6 +42,7 @@
 @section TaskDetail{
     <h3>詳細<button id="comment-add-button" style="margin-left:250px;">コメント追加</button></h3>
     <ul id="task-detail">
+        <input type="hidden" name="task-detail-id" id="task-detail-id" />
         @*タイトル*@
         <li class="task-detail-caption">タイトル</li>
         <li class="task-detail-value"></li>
@@ -47,9 +53,18 @@
         <li class="task-detail-caption">期限</li>
         <li class="task-detail-value"></li>
         @*コメント*@
+        @*最大10個までとする。*@
         <li class="task-detail-caption">コメント</li>
         <li class="task-detail-value"></li>
-        <input type="hidden" name="task-detail-id" id="task-detail-id" />
+        <li class="task-detail-value"></li>
+        <li class="task-detail-value"></li>
+        <li class="task-detail-value"></li>
+        <li class="task-detail-value"></li>
+        <li class="task-detail-value"></li>
+        <li class="task-detail-value"></li>
+        <li class="task-detail-value"></li>
+        <li class="task-detail-value"></li>
+        <li class="task-detail-value"></li>
     </ul>
 
     @*コメント登録ダイアログ*@

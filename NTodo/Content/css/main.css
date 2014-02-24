@@ -34,3 +34,7 @@ ul.regist-task > li:nth-child(n+1) {
 #task-detail .task-detail-value {
     padding-bottom: 10px;
 }
+
+.regist-task-list-item:hover{
+    cursor: pointer;
+}

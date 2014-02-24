@@ -3,12 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Nancy;
+using Nancy.ModelBinding;
 
 namespace NTodo
 {
     public class MainModule :NancyModule
     {
         private INTodoService service;
+
+        private void TraceLog(string msg)
+        {
+            Context.Trace.TraceLog.WriteLog((sb) => sb.Append(msg));
+        }
+
+        private void TraceLog(string format, params char[] p)
+        {
+            Context.Trace.TraceLog.WriteLog((sb) => sb.AppendFormat(format, p));
+        }
 
         public MainModule(INTodoService service) : base()
         {
@@ -19,11 +30,21 @@ namespace NTodo
                 return View["Index", service.GetTodoItems()];
             };
 
-
-            Get["/status/comment/{id:int}"] = p =>
+            Get["/status/{id:int}"] = p =>
             {
                 int todoId = p.id;
-                return Response.AsJson<IEnumerable<TodoComment>>(service.GetTodoComments(todoId), HttpStatusCode.OK);
+                return Response.AsJson<TodoItemDetail>(service.GetTodoDetail(todoId), HttpStatusCode.OK);
+            };
+
+            //今は「コメントの更新用API」を設けているが、
+            //他項目のAPIが必要になれば「TODOアイテムの更新用API」に集約する方向で考えている。
+
+            Post["/status/{id:int}/comments"] = p =>
+            {
+                ////パラメーターの取得
+                //int todoId = p.id;
+                //string comment = Request.Form.comment;
+                return HttpStatusCode.OK;
             };
         }
     }
@@ -31,7 +52,7 @@ namespace NTodo
     public interface INTodoService
     {
         IEnumerable<TodoItem> GetTodoItems();
-        IEnumerable<TodoComment> GetTodoComments(int todoId);
+        TodoItemDetail GetTodoDetail(int todoId);
     }
 
     public class NTodoServiceForTest : INTodoService
@@ -46,26 +67,35 @@ namespace NTodo
                         {
                             Id = i,
                             Title = string.Format("Todoアイテムその{0}", i),
-                            Detail = string.Format("詳細その{0}", i),
                             Limit = new DateTime(2014, 2, 1).AddDays(i),
                         };
                         return item;
                     });
         }
 
-        public IEnumerable<TodoComment> GetTodoComments(int todoId)
+        public TodoItemDetail GetTodoDetail(int todoId)
         {
-            return Enumerable.Range(1, todoId)
-                    .Select<int, TodoComment>((i) =>
-                    {
-                        var item = new TodoComment()
+            return new TodoItemDetail()
+            {
+                Id = todoId,
+                DetailBody = @"タスク詳細タスク詳細タスク詳細
+ タスク詳細タスク詳細
+  タスク詳細
+   タスク詳細タスク詳細
+    タスク詳細タスク詳細タスク詳細ｓ
+     タスク詳細タスク詳細タスク詳細タスク詳細
+",
+                Comments = Enumerable.Range(1, 8)
+                        .Select<int, TodoComment>((i) =>
                         {
-                            ParentId = todoId,
-                            CommentNo = i,
-                            CommentBody = string.Format("コメント{0}",i)
-                        };
-                        return item;
-                    });   
+                            var item = new TodoComment()
+                            {
+                                CommentNo = i,
+                                CommentBody = string.Format("タスク{0}のコメント{1}", todoId, i)
+                            };
+                            return item;
+                        })
+            };
         }
     }
 }
