@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using Nancy;
 using Nancy.ModelBinding;
+using Dapper;
+using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace NTodo
 {
@@ -82,10 +85,10 @@ namespace NTodo
  タスク詳細タスク詳細
   タスク詳細
    タスク詳細タスク詳細
-    タスク詳細タスク詳細タスク詳細ｓ
+    タスク詳細タスク詳細タスク詳細
      タスク詳細タスク詳細タスク詳細タスク詳細
 ",
-                Comments = Enumerable.Range(1, 8)
+                Comments = Enumerable.Range(1, 3)
                         .Select<int, TodoComment>((i) =>
                         {
                             var item = new TodoComment()
@@ -96,6 +99,27 @@ namespace NTodo
                             return item;
                         })
             };
+        }
+    }
+
+    public class NTodoService : INTodoService
+    {
+        private string conString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=Z:\git_repo\ntodo\NTodo\App_Data\Database1.mdf;Integrated Security=True";
+
+        private SqlConnection CreateConnection()
+        {
+            return new SqlConnection(conString);
+        }
+
+        public IEnumerable<TodoItem> GetTodoItems()
+        {
+            var con = CreateConnection();
+            return con.Query<TodoItem>("select id, title, finished, limit from todoitem order by id");
+        }
+
+        public TodoItemDetail GetTodoDetail(int todoId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

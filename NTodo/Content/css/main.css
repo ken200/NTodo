@@ -23,7 +23,7 @@ ul.regist-task > li:nth-child(n+1) {
     background: #c9e7f5;
 }
     
-    .regist-task-list-item:not(:last-child) {
+.regist-task-list-item:not(:last-child) {
     border-bottom: solid 1px black;
 }
 

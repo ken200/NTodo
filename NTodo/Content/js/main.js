@@ -2,6 +2,7 @@
     var taskDetailView = ntodo.views.taskDetailView;
 
     $(".regist-task-list-item").click(function () {
+        taskDetailView.clear();
         var hidden = $(":hidden", this);
         $.ajax({
             type: "GET",
@@ -19,17 +20,20 @@
     $("#dialog-form").dialog({
         autoOpen: false,
         height: 180,
-        width: 350,
+        width: 280,
         modal: true,
         buttons: [
             {
                 text: "OK",
                 click: function () {
-                    if (_.isEmpty($("#comment", this).val())) {
+                    var val = $("#comment", this).val();
+                    if (_.isEmpty(val)) {
                         alert("未入力です。");
                         return;
                     }
-                    taskDetailView.set({ comments: "コメント" });
+                    taskDetailView.set({ comments: val });
+                    $("#comment", this).val("");
+                    $(this).dialog("close");
                 }
             },
             {

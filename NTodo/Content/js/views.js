@@ -7,17 +7,25 @@ if (ntodo.views === undefined)
 * 詳細ビューオブジェクト
 */
 ntodo.views.taskDetailView = (function () {
-    var _detailRoot = $("#task-detail");
+
+    var _getLi = (function () {
+        var dRoot = undefined;
+        return function (idx) {
+            if (_.isUndefined(dRoot))
+                dRoot = $("#task-detail");
+            return $("li:eq(" + idx + ")", dRoot);
+        }
+    })();
 
     var _callIfNotDefined = function (action) {
         return function (val) {
             if (val !== undefined)
-                action(val);
+                return action(val);
         };
     };
 
     var _setTitle = _callIfNotDefined(function (val) {
-        $("li:eq(1)", _detailRoot).text(val);
+        _getLi(1).text(val);
     });
 
     var _getDetailHtml = _callIfNotDefined(function (detailOrg) {
@@ -25,31 +33,32 @@ ntodo.views.taskDetailView = (function () {
     });
 
     var _setDetail = _callIfNotDefined(function (val) {
-        $("li:eq(3)", _detailRoot).html(_getDetailHtml(val));
+        _getLi(3).html(_getDetailHtml(val));
     });
 
     var _setLimit = _callIfNotDefined(function (val) {
-        $("li:eq(5)", _detailRoot).text(val);
+        _getLi(5).text(val);
     });
 
-    var _createAddCommentAction = function (maxLength, afterAction) {
-        var max = maxLength;
-        var current = 0;
-        return _callIfNotDefined(function (comment) {
-            if (max >= current) {
-                afterAction(current, comment);
-                current++;
-            } else {
-                throw new Error("コメント上限オーバー");
-            }
-        });
+    var _commentMax = 10;
+    var _commentCount = 0;
+
+    var _addCommentCore = function (idx, comment) {
+        var body = _.isUndefined(comment.commentBody) ? comment : comment.commentBody;
+        _getLi(7+idx).text(body);
     };
 
+    var _addComment = _callIfNotDefined(function (comment) {
+        if (_commentMax >= _commentCount) {
+            _addCommentCore(_commentCount, comment);
+            _commentCount++;
+        } else {
+            throw new Error("コメント上限オーバー");
+        }
+    });
+
     var _addComments = function (comments) {
-        var _addComment = _createAddCommentAction(10, function (idx, comment) {
-            $("li:eq(" + (7 + idx) + ")", _detailRoot).text(comment.commentBody);
-        });
-        _.isArray(comments) ? _.each(comments, _addComment) : _addcomment(comments);
+        _.isArray(comments) ? _.each(comments, _addComment) : _addComment(comments);
     };
 
     var _set = function (p) {
@@ -59,7 +68,26 @@ ntodo.views.taskDetailView = (function () {
         _addComments(p.comments);
     };
 
+    //var _clearTitle = function () { _getLi(1).text(""); };
+    //var _clearDetail = function () { _getLi(3).html(""); };
+    //var _clearLimit = function () { _getLi(5).text(""); };
+
+    var _clearComments = function () {
+        _commentCount = 0;
+        _.each(_.range(7, _commentMax+7), function (v) {
+            _getLi(v).text("");
+        });
+    };
+
+    var _clear = function () {
+        //_clearTitle();
+        //_clearDetail();
+        //_clearLimit();
+        _clearComments();
+    };
+
     return {
-        set: _set
+        set: _set,
+        clear : _clear
     };
 })();
