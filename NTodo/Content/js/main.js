@@ -7,13 +7,18 @@
         $.ajax({
             type: "GET",
             url: "/status/" + hidden.val(),
-            timeout: 5000
+            timeout: 5000,
+            cache: false
         }).done(function (data) {
-            taskDetailView.set({
-                title : hidden.data("title"),
-                detail : data.detailBody,
-                limit : hidden.data("limit"),
-                comments : data.comments});
+            taskDetailView.init({
+                title: hidden.data("title"),
+                detail: data.detailBody,
+                limit: hidden.data("limit"),
+                comments: data.comments,
+                id : hidden.val()
+            });
+        }).fail(function () {
+            console.log("エラー");
         });
     });
 
@@ -31,7 +36,20 @@
                         alert("未入力です。");
                         return;
                     }
-                    taskDetailView.set({ comments: val });
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/status/" + taskDetailView.bag.id + "/comments",
+                        timeout: 5000,
+                        data : {
+                            comment : val
+                        }
+                    }).done(function (data) {
+                        taskDetailView.addComments(val);
+                    }).fail(function () {
+                        alert("エラー");
+                    });
+
                     $("#comment", this).val("");
                     $(this).dialog("close");
                 }

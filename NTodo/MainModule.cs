@@ -4,9 +4,6 @@ using System.Linq;
 using System.Web;
 using Nancy;
 using Nancy.ModelBinding;
-using Dapper;
-using System.Data.Common;
-using System.Data.SqlClient;
 
 namespace NTodo
 {
@@ -44,82 +41,11 @@ namespace NTodo
 
             Post["/status/{id:int}/comments"] = p =>
             {
-                ////パラメーターの取得
-                //int todoId = p.id;
-                //string comment = Request.Form.comment;
+                int todoId = p.id;
+                string comment = HttpUtility.HtmlEncode(Request.Form.comment);
+                service.AddComment(todoId, comment);
                 return HttpStatusCode.OK;
             };
-        }
-    }
-
-    public interface INTodoService
-    {
-        IEnumerable<TodoItem> GetTodoItems();
-        TodoItemDetail GetTodoDetail(int todoId);
-    }
-
-    public class NTodoServiceForTest : INTodoService
-    {
-        private Random rnd = new Random();
-
-        public IEnumerable<TodoItem> GetTodoItems()
-        {
-            return Enumerable.Range(1, 20)
-                    .Select<int, TodoItem>((i) => {
-                        var item = new TodoItem()
-                        {
-                            Id = i,
-                            Title = string.Format("Todoアイテムその{0}", i),
-                            Limit = new DateTime(2014, 2, 1).AddDays(i),
-                        };
-                        return item;
-                    });
-        }
-
-        public TodoItemDetail GetTodoDetail(int todoId)
-        {
-            return new TodoItemDetail()
-            {
-                Id = todoId,
-                DetailBody = @"タスク詳細タスク詳細タスク詳細
- タスク詳細タスク詳細
-  タスク詳細
-   タスク詳細タスク詳細
-    タスク詳細タスク詳細タスク詳細
-     タスク詳細タスク詳細タスク詳細タスク詳細
-",
-                Comments = Enumerable.Range(1, 3)
-                        .Select<int, TodoComment>((i) =>
-                        {
-                            var item = new TodoComment()
-                            {
-                                CommentNo = i,
-                                CommentBody = string.Format("タスク{0}のコメント{1}", todoId, i)
-                            };
-                            return item;
-                        })
-            };
-        }
-    }
-
-    public class NTodoService : INTodoService
-    {
-        private string conString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=Z:\git_repo\ntodo\NTodo\App_Data\Database1.mdf;Integrated Security=True";
-
-        private SqlConnection CreateConnection()
-        {
-            return new SqlConnection(conString);
-        }
-
-        public IEnumerable<TodoItem> GetTodoItems()
-        {
-            var con = CreateConnection();
-            return con.Query<TodoItem>("select id, title, finished, limit from todoitem order by id");
-        }
-
-        public TodoItemDetail GetTodoDetail(int todoId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

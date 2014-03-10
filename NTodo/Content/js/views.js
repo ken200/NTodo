@@ -61,11 +61,14 @@ ntodo.views.taskDetailView = (function () {
         _.isArray(comments) ? _.each(comments, _addComment) : _addComment(comments);
     };
 
-    var _set = function (p) {
+    var _bag = {};
+
+    var _init = function (p) {
         _setTitle(p.title);
         _setDetail(p.detail);
         _setLimit(p.limit);
         _addComments(p.comments);
+        _bag.id = p.id;
     };
 
     //var _clearTitle = function () { _getLi(1).text(""); };
@@ -87,7 +90,9 @@ ntodo.views.taskDetailView = (function () {
     };
 
     return {
-        set: _set,
-        clear : _clear
+        init: _init,
+        clear: _clear,
+        addComments: _addComments,
+        bag : _bag
     };
 })();

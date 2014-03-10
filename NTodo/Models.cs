@@ -18,9 +18,6 @@ namespace NTodo
 
     public class TodoItemDetail
     {
-        /// <summary>
-        /// 対応するTodoItemのID
-        /// </summary>
         public long Id { get; set; }
 
         public string DetailBody { get; set; }
@@ -30,6 +27,8 @@ namespace NTodo
 
     public class TodoComment
     {
+        public long ParentId { get; set; }
+
         public int CommentNo { get; set; }
 
         public string CommentBody { get; set; }
