@@ -48,4 +48,16 @@ namespace NTodo
             };
         }
     }
+
+    public class ApiModule : NancyModule
+    {
+        public ApiModule(INTodoService service) : base("/api")
+        {
+            Get["status/all"] = _ =>
+            {
+                int top = 100;  //todo:パラメーター指定できるようにする
+                return Response.AsJson<IEnumerable<TodoItem>>(service.GetTodoItems().Take(top), HttpStatusCode.OK);
+            };
+        }
+    }
 }

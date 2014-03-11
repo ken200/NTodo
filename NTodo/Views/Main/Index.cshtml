@@ -14,27 +14,17 @@
 
 @section RegistTaskList{
     <h3>タスク一覧</h3>
-    <div style="overflow-y:scroll;height:280px;width:550px;border:solid 1px black;">
+    <div style="overflow-y:scroll;height:280px;width:550px;border:solid 1px black;" ng-controller="tasklistCtrl">
         <ul>
-            @foreach(NTodo.TodoItem item in @Model)
-            {
-                @{
-                    var overLimit = item.Limit > new DateTime(2014,2,14);
-                    var colorCss = overLimit ? "color:red;" : "";
-                }
-                <li class="regist-task-list-item">
-                    <p>
-                    <input type="checkbox" style="margin-right:30px;" />
-                    <span style="@(colorCss)">@(item.Title)</span>
-                    </p>
-                    @*タスク情報*@
-                    <input type="hidden" 
-                           name="task@(item.Id)info" value="@(item.Id)" 
-                           data-title="@(item.Title)"
-                           data-limit="@(item.Limit)"
-                           data-finished="@(item.Finished)" />
-                </li>
-            }
+            <li ng-repeat="item in items" class="regist-task-list-item"
+                data-task-id="{{item.id}}"
+                data-task-limit="{{item.limit}}"
+                data-task-finished="{{item.finished}}">
+                <p>
+                    <input type="checkbox" style="margin-right:30px;" value="{{item.finished}}" />
+                    <span style="{{ isLimitOver(item.limit) ? 'color:red' : 'color:black' }}">{{item.title}}</span>
+                </p>
+            </li>
         </ul>
     </div>
 }
