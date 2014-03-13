@@ -82,18 +82,23 @@ app.controller("tasklistCtrl", ["$scope", "$http", function ($scope, $http) {
     /**
     * タスクの期限切れ確認
     * @param {date} limit
-    * @return {bool} true:現在日付より前、false:現在日付と同じかそれ以降
+    * @param {date} ifOverStyle 期限切れ時のスタイル
+    * @param {date} ifNotOverStyle 期限切れではない場合のスタイル
     */
-    $scope.isLimitOver = function (limit) {
-
-        console.log("リミットオーバー:", limit);
-
+    $scope.isLimitOver = function (limit, ifOverStyle, ifNotOverStyle) {
         var getYMD = function (d) {
             return new Date(d.getFullYear(), d.getMonth(), d.getDate());
         };
-        var limitYMD = getYMD(limit);
+        var limitYMD = getYMD(new Date(limit));
         var nowYMD = getYMD(new Date("2013/4/26"));  //memo: テスト用
-        return nowYMD.getTime() > limitYMD.getTime();
+        return nowYMD.getTime() > limitYMD.getTime() ? ifOverStyle : ifNotOverStyle;
     };
 
+    /**
+    * タスクの詳細情報を表示
+    * @param {int} idx タスクIndex
+    */
+    $scope.showDetail = function (idx) {
+        console.dir($scope.items[idx]);
+    };
 }]);

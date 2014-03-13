@@ -20,9 +20,9 @@
                 data-task-id="{{item.id}}"
                 data-task-limit="{{item.limit}}"
                 data-task-finished="{{item.finished}}">
-                <p>
+                <p ng-click="showDetail($index)">
                     <input type="checkbox" style="margin-right:30px;" value="{{item.finished}}" />
-                    <span style="{{ isLimitOver(item.limit) ? 'color:red' : 'color:black' }}">{{item.title}}</span>
+                    <span ng-style="getLimitStyle(item.limit, {color:'red'}, {color:'black'})">{{item.title}}</span>
                 </p>
             </li>
         </ul>
