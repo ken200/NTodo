@@ -29,6 +29,18 @@ namespace NTodo
             {
                 return View["Index", service.GetTodoItems()];
             };
+        }
+    }
+
+    public class ApiModule : NancyModule
+    {
+        public ApiModule(INTodoService service) : base("/api")
+        {
+            Get["status/all"] = _ =>
+            {
+                int top = 100;  //todo:パラメーター指定できるようにする
+                return Response.AsJson<IEnumerable<TodoItem>>(service.GetTodoItems().Take(top), HttpStatusCode.OK);
+            };
 
             Get["/status/{id:int}"] = p =>
             {
@@ -42,21 +54,9 @@ namespace NTodo
             Post["/status/{id:int}/comments"] = p =>
             {
                 int todoId = p.id;
-                string comment = HttpUtility.HtmlEncode(Request.Form.comment);
-                service.AddComment(todoId, comment);
+                var comment = this.Bind<TodoComment>();
+                service.AddComment(todoId, comment.CommentBody);
                 return HttpStatusCode.OK;
-            };
-        }
-    }
-
-    public class ApiModule : NancyModule
-    {
-        public ApiModule(INTodoService service) : base("/api")
-        {
-            Get["status/all"] = _ =>
-            {
-                int top = 100;  //todo:パラメーター指定できるようにする
-                return Response.AsJson<IEnumerable<TodoItem>>(service.GetTodoItems().Take(top), HttpStatusCode.OK);
             };
         }
     }

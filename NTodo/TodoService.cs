@@ -61,6 +61,8 @@ from (select c.* from TodoItem t inner join TodoComment c on t.id = c.parentid w
                 var tran = con.BeginTransaction();
                 try
                 {
+                    //todo:これ同時更新したらやばくない？
+
                     var cnoSql = "select count(*) + 1 as nextno from todocomment where parentid = @ID;";
                     var nextCommentNo = con.Query<int>(cnoSql, new { ID = todoId }, tran).First();
 
