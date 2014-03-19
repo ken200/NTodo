@@ -100,6 +100,8 @@
     <Content Include="App_Data\Database1_log.ldf">
       <DependentUpon>Database1.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\js\services.js" />
+    <Content Include="Content\js\utils.js" />
     <Content Include="Content\js\views.js" />
     <Content Include="packages.config" />
     <Content Include="Views\Main\Index.cshtml" />

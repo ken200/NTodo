@@ -1,74 +1,65 @@
-﻿@{
-    Layout = "Shared/_Layout.cshtml";
-}
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>NTodo</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.0.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="content/js/utils.js"></script>
+    <script src="content/js/services.js"></script>
+    <script src="content/js/main.js"></script>
+    <link rel="stylesheet" href="content/css/main.css" />
+</head>
+<body ng-app="app">
+    <div style="background:black; color:white; height:30px; width:100%; position:fixed; top:0; left: 0;">
+        Todo
+    </div>
 
-@section Main{
-    <h3>タスク登録</h3>
-    <ul class="regist-task">
-        <li><div class="title">タイトル</div><input type="text" style="width:500px;" /></li>
-        <li><div class="title">詳細</div><textarea rows="10" style="width:500px;"></textarea></li>
-        <li><div class="title">期限</div><input type="datetime-local" /></li>
-        <li><button id="task-regist-button">登録</button></li>
-    </ul>
-}
-
-@section RegistTaskList{
-    <h3>タスク一覧</h3>
-    <div style="overflow-y:scroll;height:280px;width:550px;border:solid 1px black;">
-        <ul>
-            @foreach(NTodo.TodoItem item in @Model)
-            {
-                @{
-                    var overLimit = item.Limit > new DateTime(2014,2,14);
-                    var colorCss = overLimit ? "color:red;" : "";
-                }
-                <li class="regist-task-list-item">
-                    <p>
-                    <input type="checkbox" style="margin-right:30px;" />
-                    <span style="@(colorCss)">@(item.Title)</span>
+    <div style="float:left;width:600px;height:650px;margin:10px 0 0 0;">
+        <h2>タスク一覧</h2>
+        <div style="overflow-y:scroll;height:580px;border:solid 1px black;" ng-controller="tasklistCtrl">
+            <ul>
+                <li ng-repeat="item in items" class="regist-task-list-item">
+                    <p ng-click="showDetail($index)">
+                        <input type="checkbox" style="margin-right:30px;" value="{{item.finished}}" />
+                        <span ng-style="isLimitOver(item.limit, {color:'red'}, {color:'black'})">{{item.title}}</span>
+                        <span>{{item.limit}}</span>
                     </p>
-                    @*タスク情報*@
-                    <input type="hidden" 
-                           name="task@(item.Id)info" value="@(item.Id)" 
-                           data-title="@(item.Title)"
-                           data-limit="@(item.Limit)"
-                           data-finished="@(item.Finished)" />
                 </li>
-            }
-        </ul>
+            </ul>
+        </div>
     </div>
-}
 
-@section TaskDetail{
-    <h3>詳細<button id="comment-add-button" style="margin-left:250px;">コメント追加</button></h3>
-    <ul id="task-detail">
-        <input type="hidden" name="task-detail-id" id="task-detail-id" />
-        @*タイトル*@
-        <li class="task-detail-caption">タイトル</li>
-        <li class="task-detail-value"></li>
-        @*詳細*@
-        <li class="task-detail-caption">詳細</li>
-        <li class="task-detail-value"></li>
-        @*期限*@
-        <li class="task-detail-caption">期限</li>
-        <li class="task-detail-value"></li>
-        @*コメント*@
-        @*最大10個までとする。*@
-        <li class="task-detail-caption">コメント</li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-        <li class="task-detail-value"></li>
-    </ul>
-
-    @*コメント登録ダイアログ*@
-    <div id="dialog-form" title="コメントの追加">
-        <input type="text" id="comment" />
+    <div style="float: left; width: 400px; margin: 0 0 0 50px;">
+        <div ng-controller="taskDetailCtrl">
+            <p><button style="margin: 20px 0 0 250px;" via-comment-dialog>コメント追加</button></p>
+            <ul id="task-detail" ng-show="taskId">
+                @*詳細*@
+                <li><h3>詳細</h3></li>
+                <li><div style="margin: 0 0 0 20px; height: 130px; overflow-y: scroll; border: solid 1px black; ">{{taskDetail}}</div></li>
+                @*期限*@
+                <li><h3>期限</h3></li>
+                <li>
+                    <p style="padding-left:20px;">{{taskLimit}}
+                        <span style="margin-left:50px;"><span ng-style="getLastDayStyle(taskLimit)">{{getLastDayMessage(taskLimit)}}</span></span>
+                    </p>
+                </li>
+                @*コメント （最大10個までとする。）*@
+                <li><h3>コメント</h3></li>
+                <li ng-repeat="comment in comments"><p style="padding-left: 20px;">{{comment.commentBody}} (2014/03/10 15:15:15)</p></li>
+            </ul>
+            <p ng-hide="taskId">選択してください。</p>
+        </div>
     </div>
-}
+
+    @*コメント追加ダイアログ*@
+    <div id="comment-dialog" title="コメントの追加">
+        <p><input type="text" name="comment" /></p>
+    </div>
+
+</body>
+</html>
