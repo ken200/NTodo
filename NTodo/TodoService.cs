@@ -42,7 +42,7 @@ from (select c.* from TodoItem t inner join TodoComment c on t.id = c.parentid w
             using(var multi = con.QueryMultiple(sql, new{TODO_ID = todoId}))
             {
                 var detail = multi.Read().First();
-                var comments = multi.Read<TodoComment>().Take(10);  //todo:とりあえずの対応
+                var comments = multi.Read<TodoComment>().Take(20);
 
                 return new TodoItemDetail()
                 {

@@ -42,7 +42,7 @@ namespace NTodo
                 return Response.AsJson<IEnumerable<TodoItem>>(service.GetTodoItems().Take(top), HttpStatusCode.OK);
             };
 
-            Get["/status/{id:int}"] = p =>
+            Get["status/{id:int}"] = p =>
             {
                 int todoId = p.id;
                 return Response.AsJson<TodoItemDetail>(service.GetTodoDetail(todoId), HttpStatusCode.OK);
@@ -51,7 +51,7 @@ namespace NTodo
             //今は「コメントの更新用API」を設けているが、
             //他項目のAPIが必要になれば「TODOアイテムの更新用API」に集約する方向で考えている。
 
-            Post["/status/{id:int}/comments"] = p =>
+            Post["status/{id:int}/comments"] = p =>
             {
                 int todoId = p.id;
                 var comment = this.Bind<TodoComment>();
