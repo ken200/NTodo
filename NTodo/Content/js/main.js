@@ -13,21 +13,12 @@
     * 検索条件コントローラー
     */
     app.controller("searchFilterController", ["$scope", "$rootScope", function ($scope, $rootScope) {
-        $scope.sortFilterTypes = [
-            {name : "期限の古い順", value : "Default", selected : true},
-            { name: "期限の新しい順", value: "LimitDesc" }
-        ];
-
-        $scope.listFilterTypes = [
-            { name: "すべて", value: "All", selected : true },
-            { name: "完了済のみ", value: "FinishedOnly" },
-            { name: "未完了のみ", value: "ProcessingOnly" }
-        ];
-
+        $scope.sortFilterTypes = filters.taskSorters.allInfos;
+        $scope.listFilterTypes = filters.taskFilters.allInfos;
         $scope.updateFilters = function () {
+            var sorter = filters.taskSorters.getSorter($scope.sortFilter.type);
+            var filter = filters.taskFilters.getFilter($scope.listFilter.type);
             $rootScope.$broadcast("UPDATE_FILTER", function(items){
-                var sorter = filters.sortFilter($scope.sortFilter.value);
-                var filter = filters.taskFilter($scope.listFilter.value);
                 return sorter(filter(items));
             });
         };
@@ -42,7 +33,7 @@
 
         taskService.getAll().success(function (data, code) {
             _allItems = data;
-            $scope.items = data;
+            $scope.items = filters.execDefaultFilterAndSort(data);
         }).error(function (error) {
             alert("エラー");
             console.dir(error);
