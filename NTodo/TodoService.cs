@@ -27,7 +27,19 @@ namespace NTodo
         public IEnumerable<TodoItem> GetTodoItems()
         {
             var con = CreateConnection();
-            return con.Query<TodoItem>("select id, title, finished, limit from todoitem order by id");
+            return con.Query("select id, title, finished, limit, detail from todoitem order by id").Select((item) => 
+            {
+                string detail = item.detail;
+                var summary = detail.Take(20).Aggregate<char, string>("", (memo, c) => memo + c);
+                return new TodoItem()
+                {
+                    Id = item.id,
+                    Title = item.title,
+                    Finished = item.finished,
+                    Limit = item.limit,
+                    DetailSummary = summary + (detail == summary ? "" : "...")
+                };
+            });
         }
 
         public TodoItemDetail GetTodoDetail(int todoId)

@@ -11,6 +11,8 @@ namespace NTodo
 
         public string Title { get; set; }
 
+        public string DetailSummary { get; set; }
+
         public bool Finished { get; set; }
 
         public DateTime Limit { get; set; }

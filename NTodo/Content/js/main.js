@@ -9,12 +9,39 @@
         return new services.TaskService($http);
     }]);
 
+    /**
+    * 検索条件コントローラー
+    */
+    app.controller("searchFilterController", ["$scope", "$rootScope", function ($scope, $rootScope) {
+        $scope.sortFilterTypes = [
+            {name : "期限の古い順", value : "Default", selected : true},
+            { name: "期限の新しい順", value: "LimitDesc" }
+        ];
+
+        $scope.listFilterTypes = [
+            { name: "すべて", value: "All", selected : true },
+            { name: "完了済のみ", value: "FinishedOnly" },
+            { name: "未完了のみ", value: "ProcessingOnly" }
+        ];
+
+        $scope.updateFilters = function () {
+            $rootScope.$broadcast("UPDATE_FILTER", function(items){
+                var sorter = filters.sortFilter($scope.sortFilter.value);
+                var filter = filters.taskFilter($scope.listFilter.value);
+                return sorter(filter(items));
+            });
+        };
+    }]);
 
     /**
     * タスクリストコントローラー
     */
     app.controller("tasklistCtrl", ["taskService", "$rootScope", "$scope", function (taskService, $rootScope, $scope) {
+
+        var _allItems = [];
+
         taskService.getAll().success(function (data, code) {
+            _allItems = data;
             $scope.items = data;
         }).error(function (error) {
             alert("エラー");
@@ -34,6 +61,41 @@
         };
 
         /**
+        * 期限までの残日数毎の各種定義
+        * 「期限切れ」、「当日」、「期限切れが5日無い(残4日以下)」、「期限切れが5日以上あり」 でそれぞれ変えている
+        */
+        var limitInfos = (function () {
+            var _find = function (limit) {
+                var ld = utils.getLastDay(limit);
+                var infos = [
+                    { is: ld < 0, css: { color: "#E8105F" }, message: "期限切れ(" + Math.abs(ld) + "日経過)" },
+                    { is: ld === 0, css: { color: "#AC41F2" }, message: "今日が期限日です！！" },
+                    { is: ld >= 5, css: { color: "#034EFF" }, message: "あと" + ld + "日です。" },
+                    { is: ld < 5, css: { color: "#0A7318" }, message: "あと" + ld + "日です。お早目に！" }
+                ];
+                return _.find(infos, function (i) { return i.is; });
+            };
+            return {
+                find: _find
+            };
+        })();
+
+        /**
+        * 期限までの残日数に対応したスタイルの取得
+        */
+        $scope.getLastDayStyle = function (limit) {
+            return limitInfos.find(limit || new Date()).css;
+        };
+
+        /**
+        * 期限までの残日数に対応したメッセージの取得
+        */
+        $scope.getLastDayMessage = function (limit) {
+            return limitInfos.find(limit || new Date()).message;
+        };
+
+
+        /**
         * タスクの詳細情報を表示
         * 「SHOW_TASKDETAIL」メッセージをブロードキャスト送信する
         *
@@ -43,6 +105,10 @@
             var item = $scope.items[idx];
             $rootScope.$broadcast("SHOW_TASKDETAIL", item);
         };
+
+        $scope.$on("UPDATE_FILTER", function (event, filter) {
+            $scope.items = filter(_allItems);
+        });
     }]);
 
 
@@ -57,11 +123,9 @@
         * 「SHOW_TASKDETAIL」メッセージ受信時処理（タスク詳細の表示）
         */
         $scope.$on("SHOW_TASKDETAIL", function (event, data) {
-            var limit = data.limit;
             taskService.getDetail(data.id).success(function (data, code) {
                 $scope.taskId = data.id;
                 $scope.taskDetail = data.detailBody;
-                $scope.taskLimit = limit;
                 $scope.comments = data.comments;
             }).error(function (error) {
                 alert("エラー");
@@ -80,41 +144,6 @@
                 console.dir(error);
             });
         });
-
-        /**
-        * 期限までの残日数毎の各種定義
-        * 「期限切れ」、「当日」、「期限切れが5日無い(残4日以下)」、「期限切れが5日以上あり」 でそれぞれ変えている
-        */
-        var limitInfos = (function(){
-            var _find = function(limit){
-                var ld = utils.getLastDay(limit);
-                var infos = [
-                    { is: ld < 0, css: { color: "#E8105F" }, message: "期限切れ(" + Math.abs(ld) + "日経過)" },
-                    { is: ld === 0, css: { color: "#AC41F2" }, message: "今日が期限日です！！" },
-                    { is: ld >= 5, css: { color: "#034EFF" }, message: "あと" + ld + "日です。" },
-                    { is: ld < 5, css: { color: "#0A7318" }, message: "あと" + ld + "日です。お早目に！" }
-                ];
-                return _.find(infos, function(i){return i.is;});
-            };
-            return {
-                find : _find
-            };
-        })();
-
-        /**
-        * 期限までの残日数に対応したスタイルの取得
-        */
-        $scope.getLastDayStyle = function (limit) {
-            return limitInfos.find(limit || new Date()).css;
-        };
-
-        /**
-        * 期限までの残日数に対応したメッセージの取得
-        */
-        $scope.getLastDayMessage = function (limit) {
-            return limitInfos.find(limit || new Date()).message;
-        };
-
     }]);
 
 

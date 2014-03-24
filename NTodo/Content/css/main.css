@@ -13,10 +13,42 @@ ul.regist-task > li:nth-child(n+1) {
     margin: 10px 0 10px 0;
 }
 
-.regist-task-list-item p{
+.regist-task-list-item{
     margin:0;
     padding:10px 0 10px 0;
     height:20px;
+}
+
+.regist-task-list-item div{
+    float: left;
+}
+
+.regist-task-list-item .finished{
+    width: 50px;
+}
+
+.regist-task-list-item .task-title{
+    width: 250px;
+}
+
+.regist-task-list-item .detail-summary {
+    width: 350px;
+}
+
+.regist-task-list-item .limit-day {
+    width: 150px;
+}
+
+.regist-task-list-item .limit-msg {
+    width: 150px;
+}
+
+.list-operation-area{
+    margin: 30px 0 10px 0;
+}
+
+.list-operation-area div{
+    float:left;
 }
 
 .regist-task-list-item:hover {
