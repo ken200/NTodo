@@ -5,8 +5,6 @@ describe("抽出フィルタ", function () {
     describe("フィルタ情報", function () {
 
         var infos = filters.taskFilters.allInfos;
-        var getFilter = filters.taskFilters.getFilter;
-
 
         it("フィルタ情報数は3件", function () {
             expect(infos.length).toBe(3);
@@ -32,7 +30,6 @@ describe("抽出フィルタ", function () {
         it("フィルタ情報 - ALL", function () {
             expect(infos[0].name === "すべて").toBe(true);
             expect(infos[0].type === "ALL").toBe(true);
-
         });
 
 
@@ -47,12 +44,7 @@ describe("抽出フィルタ", function () {
             expect(infos[2].type === "FinishedOnly").toBe(true);
         });
 
-
-        it("'ALL'指定でgetFilterすると全対象フィルタが取得できる", function () {
-            expect(getFilter("all")).not.toBeUndefined();
-            expect(getFilter("ALL")).not.toBeUndefined();
-        });
-
+        var getFilter = filters.taskFilters.getFilter;
 
         it("全対象フィルタの動作検証 - 何も行わない。", function () {
             var filter = getFilter("ALL");
@@ -82,16 +74,20 @@ describe("抽出フィルタ", function () {
         });
 
 
-        it("完了済のみフィルタの動作検証 - 配列内オブジェクトのfinishdプロパティがtrueの要素のみ抽出する。", function () {
-
-            var filter = getFilter("FinishedOnly");
-
+        /**
+        * フィルタの動作確認
+        *
+        * @param {object} filter 確認対象フィルタ
+        * @param {bool} expectFinsiedState フィルタ対象となるfinished値
+        *
+        */
+        var expectFilterResult = function (filter, expectFinsiedState) {
             expect(filter).not.toBeUndefined();
 
             var chkOrderAndVal = function (ary1, ary2) {
                 if (ary1.length === ary2.length) {
                     for (var i = 0; i < ary1.length; i++) {
-                        if (!ary1.finished || !ary2.finished)
+                        if (ary1.finished === !expectFinsiedState || ary2.finished === !expectFinsiedState)
                             return false;
                         if (ary1.a !== ary2.a || ary1.b !== ary2.b || ary1.c !== ary2.c)
                             return false;
@@ -109,26 +105,18 @@ describe("抽出フィルタ", function () {
                 { a: 5, b: "お", c: "e", finished: false },
                 { a: 6, b: "か", c: "g", finished: true }
             ];
+            var filterdExpectAry = _.filter(orgAry, function (i) { return i.finished === expectFinsiedState;});
 
-            var filterdExpectAry = [
-                { a: 1, b: "あ", c: "a", finished: true },
-                { a: 6, b: "か", c: "g", finished: true }
-            ];
+            expect(chkOrderAndVal(filter(orgAry), filterdExpectAry)).toBe(true);
+        };
 
-            var result = filter(orgAry);
-            expect(result.length).toBe(2);
-            expect(result[0].a).toBe(1);
-            expect(result[0].b).toBe("あ");
-            expect(result[0].c).toBe("a");
-            expect(result[0].finished).toBe(true);
-            expect(result[1].a).toBe(6);
-            expect(result[1].b).toBe("か");
-            expect(result[1].c).toBe("g");
-            expect(result[1].finished).toBe(true);
-
-            expect(chkOrderAndVal(result, filterdExpectAry)).toBe(true);
+        it("完了済のみフィルタの動作検証 - 配列内オブジェクトのfinishdプロパティがtrueの要素のみ抽出する。", function () {
+            expectFilterResult(getFilter("FinishedOnly"), true);
         });
 
+        it("未完了フィルタの動作検証 - 配列内オブジェクトのfinishdプロパティがfalseの要素のみ抽出する。", function () {
+            expectFilterResult(getFilter("ProcessingOnly"), false);
+        });
 
     });
 

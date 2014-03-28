@@ -1,5 +1,6 @@
 module.exports = function(config){
-  config.set({
+    config.set({
+    // Content/js ‚ğƒ‹[ƒg‚Æ‚·‚é
     basePath : '../',
 
     files : [

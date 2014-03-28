@@ -1,25 +1,8 @@
-﻿<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8" />
-    <title>NTodo</title>
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.0.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js"></script>
-    <script src="http://underscorejs.org/underscore-min.js"></script>
-    <script src="content/js/utils.js"></script>
-    <script src="content/js/filters.js"></script>
-    <script src="content/js/services.js"></script>
-    <script src="content/js/main.js"></script>
-    <link rel="stylesheet" href="content/css/main.css" />
-</head>
-<body ng-app="app">
-    <div style="background:black; color:white; height:30px; width:100%; position:fixed; top:0; left: 0;">
-        Todo
-    </div>
+﻿@{
+    Layout = "Shared/_Layout.cshtml";
+}
 
+<div ng-app="app">
     <div style="float:left;width:1000px;height:650px;margin:10px 0 0 0;">
         <h2>タスク一覧</h2>
         @* ### 検索条件コントローラー ### *@
@@ -82,6 +65,4 @@
     <div id="comment-dialog" title="コメントの追加">
         <p><input type="text" name="comment" /></p>
     </div>
-
-</body>
-</html>
+</div>
