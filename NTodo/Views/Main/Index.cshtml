@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>NTodo</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.0.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="content/js/utils.js"></script>
+    <script src="content/js/filters.js"></script>
+    <script src="content/js/services.js"></script>
+    <script src="content/js/main.js"></script>
+    <link rel="stylesheet" href="content/css/main.css" />
+</head>
+<body ng-app="app">
+    <div style="background:black; color:white; height:30px; width:100%; position:fixed; top:0; left: 0;">
+        Todo
+    </div>
+
+    <div style="float:left;width:1000px;height:650px;margin:10px 0 0 0;">
+        <h2>タスク一覧</h2>
+        @* ### 検索条件コントローラー ### *@
+        <div class="list-operation-area" ng-controller="searchFilterController">
+            <div style="margin-left:550px;">
+                <div>
+                    <label for="sort-filter">ソート順 </label>
+                    @*selectディレクティブの記述方法： optionリストは別途jsで用意する必要あり。デフォルト値設定はng-initに指定する必要あり。*@
+                    @*ng-model属性に設定した名称のプロパティでアクセス可能（formタグで括るとかは要らない。）*@
+                    <select id="sort-filter" ng-model="sortFilter" ng-options="i.name for i in sortFilterTypes" ng-init="sortFilter = sortFilterTypes[0]"></select>
+                </div>
+            </div>
+            <div>
+                <div style="margin:0 0 0 20px;">
+                    <label for="list-filter">表示対象 </label>
+                    <select id="list-filter" ng-model="listFilter" ng-options="i.name for i in listFilterTypes" ng-init="listFilter = listFilterTypes[0]"></select>
+                </div>
+            </div>
+            <div style="float: none;">
+                <button id="filter-execute-button" style="margin:0 0 0 20px;" ng-click="updateFilters()">表示更新</button>
+            </div>
+        </div>
+
+        @* ### タスクリストコントローラー ### *@
+        <div style="overflow-y:scroll;height:580px;border:solid 1px black;" ng-controller="tasklistCtrl">
+            <ul>
+                <li ng-repeat="item in items" ng-click="showDetail($index)" class="regist-task-list-item">
+                    @*ステータス(チェックボックスで表現)*@
+                    <div class="finished"><input type="checkbox" value="{{item.finished}}" /></div>
+                    @*タスクタイトル*@
+                    <div class="task-title"><span ng-style="isLimitOver(item.limit, {color:'red'}, {color:'black'})">{{item.title}}</span></div>
+                    @*タスク詳細先頭20文字(多い分は...で省略する。)*@
+                    <div class="detail-summary"><span>{{item.detailSummary}}</span></div>
+                    @*期限日付*@
+                    <div class="limit-day"><span>{{item.limit | date:'yyyy/MM/dd'}}</span></div>
+                    @*期限日数*@
+                    <div class="limit-msg"><span ng-style="getLastDayStyle(item.limit)">{{getLastDayMessage(item.limit)}}</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="float: left; width: 400px; margin: 0 0 0 50px;">
+        @* ### タスク詳細コントローラー ### *@
+        <div ng-controller="taskDetailCtrl">
+            <p><button style="margin: 20px 0 0 250px;" via-comment-dialog>コメント追加</button></p>
+            <ul id="task-detail" ng-show="taskId">
+                @*詳細*@
+                <li><h3>詳細</h3></li>
+                <li><div style="margin: 0 0 0 20px; height: 130px; overflow-y: scroll; border: solid 1px black; ">{{taskDetail}}</div></li>
+                @*コメント （最大10個までとする。）*@
+                <li><h3>コメント</h3></li>
+                <li ng-repeat="comment in comments"><p style="padding-left: 20px;">{{comment.commentBody}} (2014/03/10 15:15:15)</p></li>
+            </ul>
+            <p ng-hide="taskId">選択してください。</p>
+        </div>
+    </div>
+
+    @*コメント追加ダイアログ*@
+    <div id="comment-dialog" title="コメントの追加">
+        <p><input type="text" name="comment" /></p>
+    </div>
+
+</body>
+</html>
