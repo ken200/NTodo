@@ -121,3 +121,32 @@ describe("抽出フィルタ", function () {
     });
 
 });
+
+
+describe("デフォルトフィルタ", function () {
+
+    it("実行結果 - AllフィルタとLimitAscの実行結果と同じになる", function () {
+        var chkOrderAndVal = function (ary1, ary2) {
+            if (ary1.length === ary2.length) {
+                for (var i = 0; i < ary1.length; i++) {
+                    if (ary1.a !== ary2.a || ary1.b !== ary2.b || ary1.limit !== ary2.limit || ary1.finished !== ary2.finished)
+                        return false;
+                }
+                return true;
+            }
+            return false;
+        };
+        var orgAry = [
+            { a: 1, b: "あ", c: "a", limit: "2015-05-01T00:00:00", finished: true },
+            { a: 2, b: "い", c: "b", limit: "2015-04-01T00:00:00", finished: false },
+            { a: 3, b: "う", c: "c", limit: "2015-03-01T00:00:00", finished: false },
+            { a: 4, b: "え", c: "d", limit: "2015-02-01T00:00:00", finished: false },
+            { a: 5, b: "お", c: "e", limit: "2015-01-01T00:00:00", finished: false },
+            { a: 6, b: "か", c: "g", limit: "2014-12-01T00:00:00", finished: true }
+        ];
+        var expectSortedAry = _.sortBy(orgAry, function (i) { return new Date(i.limit);})
+
+        expect(chkOrderAndVal(filters.execDefaultFilterAndSort(orgAry), expectSortedAry)).toBe(true);
+    });
+
+});

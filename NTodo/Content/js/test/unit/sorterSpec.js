@@ -33,9 +33,9 @@
         expect(infos[0].order < infos[1].order).toBe(true);
     });
 
-    it("フィルタ情報 - Defalt", function () {
+    it("フィルタ情報 - LimitAsc", function () {
         expect(infos[0].name === "期限の古い順").toBe(true);
-        expect(infos[0].type === "Default").toBe(true);
+        expect(infos[0].type === "LimitAsc").toBe(true);
     });
 
     it("フィルタ情報 - LimitDesc", function () {
