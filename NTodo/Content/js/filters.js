@@ -41,7 +41,7 @@
         filters.taskSorters = {};
         var _filters = [];
         _filters.push(_createFilter("LimitDesc", "期限の新しい順", 2, function (i) { return new Date(i.limit).getTime() * -1; }, false));
-        _filters.push(_createFilter("Default", "期限の古い順", 1, function (i) { return new Date(i.limit).getTime(); }, true));
+        _filters.push(_createFilter("LimitAsc", "期限の古い順", 1, function (i) { return new Date(i.limit).getTime(); }, true));
 
         /* 全フィルタ情報 */
         filters.taskSorters.allInfos = _createAllInfos(_filters);

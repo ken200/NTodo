@@ -24,3 +24,4 @@ obj
 bin
 packages
 *.ldf
+node_modules

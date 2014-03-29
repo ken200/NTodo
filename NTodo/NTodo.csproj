@@ -101,12 +101,22 @@
       <DependentUpon>Database1.mdf</DependentUpon>
     </Content>
     <Content Include="Content\js\filters.js" />
+    <Content Include="Content\js\lib\angular\angular-route.min.js" />
+    <Content Include="Content\js\lib\angular\angular.min.js" />
+    <Content Include="Content\js\lib\jquery\jquery-2.1.0.min.js" />
+    <Content Include="Content\js\lib\jquery\jquery-ui.css" />
+    <Content Include="Content\js\lib\jquery\jquery-ui.min.js" />
+    <Content Include="Content\js\lib\underscore\underscore-min.js" />
     <Content Include="Content\js\services.js" />
+    <Content Include="Content\js\test\karma.conf.js" />
+    <Content Include="Content\js\test\unit\filterSpec.js" />
+    <Content Include="Content\js\test\unit\sorterSpec.js" />
     <Content Include="Content\js\utils.js" />
     <Content Include="Content\js\views.js" />
     <Content Include="packages.config" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Content\js\test\test.bat" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
