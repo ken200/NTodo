@@ -101,22 +101,53 @@
       <DependentUpon>Database1.mdf</DependentUpon>
     </Content>
     <Content Include="Content\js\filters.js" />
+    <Content Include="Content\js\lib\angular\angular-animate.js" />
+    <Content Include="Content\js\lib\angular\angular-animate.min.js" />
+    <Content Include="Content\js\lib\angular\angular-cookies.js" />
+    <Content Include="Content\js\lib\angular\angular-cookies.min.js" />
+    <Content Include="Content\js\lib\angular\angular-csp.css" />
+    <Content Include="Content\js\lib\angular\angular-loader.js" />
+    <Content Include="Content\js\lib\angular\angular-loader.min.js" />
+    <Content Include="Content\js\lib\angular\angular-mocks.js" />
+    <Content Include="Content\js\lib\angular\angular-resource.js" />
+    <Content Include="Content\js\lib\angular\angular-resource.min.js" />
+    <Content Include="Content\js\lib\angular\angular-route.js" />
     <Content Include="Content\js\lib\angular\angular-route.min.js" />
+    <Content Include="Content\js\lib\angular\angular-sanitize.js" />
+    <Content Include="Content\js\lib\angular\angular-sanitize.min.js" />
+    <Content Include="Content\js\lib\angular\angular-scenario.js" />
+    <Content Include="Content\js\lib\angular\angular-touch.js" />
+    <Content Include="Content\js\lib\angular\angular-touch.min.js" />
+    <Content Include="Content\js\lib\angular\angular.js" />
     <Content Include="Content\js\lib\angular\angular.min.js" />
+    <Content Include="Content\js\lib\angular\version.txt" />
     <Content Include="Content\js\lib\jquery\jquery-2.1.0.min.js" />
     <Content Include="Content\js\lib\jquery\jquery-ui.css" />
     <Content Include="Content\js\lib\jquery\jquery-ui.min.js" />
     <Content Include="Content\js\lib\underscore\underscore-min.js" />
+    <Content Include="Content\js\models.js" />
     <Content Include="Content\js\services.js" />
     <Content Include="Content\js\test\karma.conf.js" />
     <Content Include="Content\js\test\unit\filterSpec.js" />
+    <Content Include="Content\js\test\unit\limitInfosSpec.js" />
     <Content Include="Content\js\test\unit\sorterSpec.js" />
+    <Content Include="Content\js\test\unit\taskListCtrlSpec.js" />
     <Content Include="Content\js\utils.js" />
     <Content Include="Content\js\views.js" />
     <Content Include="packages.config" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Content\js\test\test.bat" />
+    <Content Include="Content\js\lib\angular\angular-animate.min.js.map" />
+    <Content Include="Content\js\lib\angular\angular-cookies.min.js.map" />
+    <Content Include="Content\js\lib\angular\angular-loader.min.js.map" />
+    <Content Include="Content\js\lib\angular\angular-resource.min.js.map" />
+    <Content Include="Content\js\lib\angular\angular-route.min.js.map" />
+    <Content Include="Content\js\lib\angular\angular-sanitize.min.js.map" />
+    <Content Include="Content\js\lib\angular\angular-touch.min.js.map" />
+    <Content Include="Content\js\lib\angular\angular.min.js.map" />
+    <Content Include="Content\js\lib\angular\errors.json" />
+    <Content Include="Content\js\lib\angular\version.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

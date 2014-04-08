@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    var app = angular.module("app", ["ngRoute"]);
+    var app = angular.module("myapp", ["ngRoute"]);
 
     /**
     * サービス登録 - TaskService
@@ -41,14 +41,15 @@
 
         /**
         * タスクの期限切れ確認
-        * @param {date} limit
-        * @param {date} ifOverStyle 期限切れ時のスタイル
-        * @param {date} ifNotOverStyle 期限切れではない場合のスタイル
+        * @param {date} limit タスクのリミット日時
+        * @param {string} ifOverStyle 期限切れ時のスタイル
+        * @param {string} ifNotOverStyle 期限切れではない場合のスタイル
+        * @param {date} now この日時がリミット日時を超えている・いないで期限切れを判定する。未指定の際には現在日時を使う。
         */
-        $scope.isLimitOver = function (limit, ifOverStyle, ifNotOverStyle) {
+        $scope.isLimitOver = function (limit, ifOverStyle, ifNotOverStyle, now) {
             var limitYMD = utils.getYMD(new Date(limit));
-            var nowYMD = utils.getYMD(new Date("2013/4/26"));  //memo: テスト用
-            return nowYMD.getTime() > limitYMD.getTime() ? ifOverStyle : ifNotOverStyle;
+            var nowYMD = utils.getYMD(now ? new Date(now) : undefined);
+            return nowYMD.getTime() < limitYMD.getTime() ? ifOverStyle : ifNotOverStyle;
         };
 
         /**

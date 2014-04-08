@@ -3,15 +3,19 @@ module.exports = function(config){
     // Content/js ÇÉãÅ[ÉgÇ∆Ç∑ÇÈ
     basePath : '../',
 
-    files : [
-      'lib/angular/angular.min.js',
+    files: [
       'lib/jquery/*.js',
+      'lib/angular/angular.js',
+      'lib/angular/angular-*.js',
       'lib/underscore/*.js',
       '*.js',
       'test/unit/*.js'
     ],
 
-    exclude : [
+    exclude: [
+      'lib/angular/angular-loader.js',
+      'lib/angular/angular-scenario.js',
+      'lib/angular/*.min.js'
     ],
 
     autoWatch : true,
