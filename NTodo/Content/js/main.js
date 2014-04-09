@@ -10,6 +10,13 @@
     }]);
 
     /**
+    * サービス登録 - LimitInfoService
+    */
+    app.factory("limitInfoService", [function () {
+        return new services.LimitInfoService();
+    }]);
+
+    /**
     * 検索条件コントローラー
     */
     app.controller("searchFilterController", ["$scope", "$rootScope", function ($scope, $rootScope) {
@@ -27,7 +34,7 @@
     /**
     * タスクリストコントローラー
     */
-    app.controller("tasklistCtrl", ["taskService", "$rootScope", "$scope", function (taskService, $rootScope, $scope) {
+    app.controller("tasklistCtrl", ["taskService", "limitInfoService", "$rootScope", "$scope", function (taskService, limitInfoService, $rootScope, $scope) {
 
         var _allItems = [];
 
@@ -53,39 +60,18 @@
         };
 
         /**
-        * 期限までの残日数毎の各種定義
-        * 「期限切れ」、「当日」、「期限切れが5日無い(残4日以下)」、「期限切れが5日以上あり」 でそれぞれ変えている
-        */
-        var limitInfos = (function () {
-            var _find = function (limit) {
-                var ld = utils.getLastDay(limit);
-                var infos = [
-                    { is: ld < 0, css: { color: "#E8105F" }, message: "期限切れ(" + Math.abs(ld) + "日経過)" },
-                    { is: ld === 0, css: { color: "#AC41F2" }, message: "今日が期限日です！！" },
-                    { is: ld >= 5, css: { color: "#034EFF" }, message: "あと" + ld + "日です。" },
-                    { is: ld < 5, css: { color: "#0A7318" }, message: "あと" + ld + "日です。お早目に！" }
-                ];
-                return _.find(infos, function (i) { return i.is; });
-            };
-            return {
-                find: _find
-            };
-        })();
-
-        /**
         * 期限までの残日数に対応したスタイルの取得
         */
         $scope.getLastDayStyle = function (limit) {
-            return limitInfos.find(limit || new Date()).css;
+            return limitInfoService.find(limit || new Date()).css;
         };
 
         /**
         * 期限までの残日数に対応したメッセージの取得
         */
         $scope.getLastDayMessage = function (limit) {
-            return limitInfos.find(limit || new Date()).message;
+            return limitInfoService.find(limit || new Date()).message;
         };
-
 
         /**
         * タスクの詳細情報を表示

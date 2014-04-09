@@ -50,11 +50,11 @@ models.LimitInfos = (function () {
     /**
     *期限切れ時情報の作成
     */
-    LI.registInfoWhenLimitOver = function (info, css, msgHeader) {
+    LI.registInfoWhenLimitOver = function (info, css, msg) {
         info.registInfo(function is(limit) {
             var ld = LI._calcLimit(limit);
             if (ld < 0) {
-                return { css: css, message: msgHeader + "(" + Math.abs(ld) + "日経過)" };
+                return { css: css, message: msg ||  "期限切れ (" + Math.abs(ld) + "日経過)" };
             } else {
                 return undefined;
             }
@@ -76,13 +76,13 @@ models.LimitInfos = (function () {
     };
 
     /**
-    *期限日までN日以上ある場合の情報の登録
+    *期限日までN日より多い場合の情報の登録
     */
-    LI.registInfoWhenLimitGreaterThan = function (info, n, css, msgHeader) {
+    LI.registInfoWhenLimitGreaterThan = function (info, n, css) {
         info.registInfo(function is(limit) {
             var ld = LI._calcLimit(limit);
-            if (ld >= n) {
-                return { css: css, message: msgHeader + "あと" + Math.abs(ld) + "日です。" };
+            if (ld > n) {
+                return { css: css, message: "あと" + Math.abs(ld) + "日です。" };
             } else {
                 return undefined;
             }
@@ -90,13 +90,13 @@ models.LimitInfos = (function () {
     };
 
     /**
-    *期限日までN日より少ない場合の情報の登録
+    *期限日までN日以下の場合の情報の登録
     */
-    LI.registInfoWhenLimitLessThan = function (info, n, css, msgHeader) {
+    LI.registInfoWhenLimitLessThanEq = function (info, n, css) {
         info.registInfo(function is(limit) {
             var ld = LI._calcLimit(limit);
-            if (ld < n) {
-                return { css: css, message: msgHeader + "あと" + Math.abs(ld) + "日です。。お早目に！" };
+            if (ld > 0 && ld <= n) {
+                return { css: css, message: "あと" + Math.abs(ld) + "日です。お早目に！" };
             } else {
                 return undefined;
             }

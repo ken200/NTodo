@@ -19,3 +19,26 @@ services.TaskService = (function () {
 
     return TaskService;
 })();
+
+
+services.LimitInfoService = (function () {
+
+    function LimitInfoService() {
+        this.infos = new models.LimitInfos();
+        //期限切れ
+        models.LimitInfos.registInfoWhenLimitOver(this.infos, { color: '#E8105F' });
+        //当日
+        models.LimitInfos.registInfoWhenLimitToday(this.infos, { color: '#AC41F2' });
+        //期限日5日より前
+        models.LimitInfos.registInfoWhenLimitGreaterThan(this.infos, 5, { color: '#034EFF' });
+        //期限日5日以内
+        models.LimitInfos.registInfoWhenLimitLessThanEq(this.infos, 5, { color: '#0A7318' });
+    }
+
+    LimitInfoService.prototype.find = function (limit) {
+        return this.infos.find(limit);
+    };
+
+    return LimitInfoService;
+
+})();
