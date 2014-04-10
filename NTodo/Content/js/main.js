@@ -3,15 +3,11 @@
     var app = angular.module("myapp", ["ngRoute"]);
 
     /**
-    * サービス登録 - TaskService
+    * サービス登録
     */
     app.factory("taskService", ["$http", function ($http) {
         return new services.TaskService($http);
     }]);
-
-    /**
-    * サービス登録 - LimitInfoService
-    */
     app.factory("limitInfoService", [function () {
         return new services.LimitInfoService();
     }]);
@@ -47,16 +43,14 @@
         });
 
         /**
-        * タスクの期限切れ確認
-        * @param {date} limit タスクのリミット日時
+        * タスクの期限切れ状態に応じたスタイルの取得
+        *
+        * @param {date} limit タスクのリミット日付
         * @param {string} ifOverStyle 期限切れ時のスタイル
         * @param {string} ifNotOverStyle 期限切れではない場合のスタイル
-        * @param {date} now この日時がリミット日時を超えている・いないで期限切れを判定する。未指定の際には現在日時を使う。
         */
         $scope.isLimitOver = function (limit, ifOverStyle, ifNotOverStyle, now) {
-            var limitYMD = utils.getYMD(new Date(limit));
-            var nowYMD = utils.getYMD(now ? new Date(now) : undefined);
-            return nowYMD.getTime() < limitYMD.getTime() ? ifOverStyle : ifNotOverStyle;
+            return utils.isLimitOver(limit, now) ? ifOverStyle : ifNotOverStyle;
         };
 
         /**
@@ -94,8 +88,6 @@
     * タスク詳細コントローラー
     */
     app.controller("taskDetailCtrl", ["taskService", "$scope", function (taskService, $scope) {
-
-        console.log("init taskDetailCtrl");
 
         /**
         * 「SHOW_TASKDETAIL」メッセージ受信時処理（タスク詳細の表示）

@@ -47,7 +47,7 @@
     describe("isLimitOverメソッド", function () {
 
         var ctrl, scope, httpBackend;
-
+        
         beforeEach(inject(function ($controller, $rootScope, _$httpBackend_) {
             httpBackend = initHttpBackEnd(_$httpBackend_);
             scope = $rootScope.$new();
@@ -73,7 +73,4 @@
             expect(scope.isLimitOver(limit, "over", "not over", now)).toBe("over");
         });
     });
-
-    //getLastDayStyleをテスト容易となるようにリファクタリングする
-
 });
