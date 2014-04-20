@@ -10,6 +10,7 @@ module.exports = function(config){
       'lib/underscore/*.js',
       '*.js',
       'test/unit/*.js'
+        //'test/unit/tasklistctrlspec.js'
     ],
 
     exclude: [

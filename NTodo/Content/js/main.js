@@ -34,7 +34,7 @@
 
         var _allItems = [];
 
-        taskService.getAll().success(function (data, code) {
+        taskService.getTaskList(20).success(function (data, code) {
             _allItems = data;
             $scope.items = filters.execDefaultFilterAndSort(data);
         }).error(function (error) {

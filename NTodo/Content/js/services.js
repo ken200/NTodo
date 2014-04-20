@@ -5,8 +5,9 @@ services.TaskService = (function () {
         this.$http = $http;
     };
 
-    TaskService.prototype.getAll = function () {
-        return this.$http.get("/api/status/all");
+    TaskService.prototype.getTaskList = function (count, id) {
+        var idParam = _.isUndefined(id) ? "" : ("&id=" + id);
+        return this.$http.get("/api/status?count=" + count + idParam);
     };
 
     TaskService.prototype.getDetail = function (taskId) {

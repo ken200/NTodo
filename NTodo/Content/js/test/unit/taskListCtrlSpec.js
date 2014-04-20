@@ -15,7 +15,7 @@
 
     var initHttpBackEnd = function ($hb, initCalback) {
         if (_.isUndefined(initCalback)) {
-            $hb.expectGET("/api/status/all").respond(500, "エラーですね")
+            $hb.expectGET("/api/status?count=20").respond(500, "エラーですね")
         } else {
             initCalback($hb);
         }
@@ -27,7 +27,7 @@
     describe("コントローラー生成後のタスクアイテムリスト", function () {
         it("期限までの残日数の有無関係なく、期限の古いもの順でソートされている。", inject(function (_$httpBackend_, $rootScope, $controller) {
             var httpBackend = initHttpBackEnd(_$httpBackend_, function ($hb) {
-                $hb.expectGET("/api/status/all").respond(createTodoItems(10, "タイトル", "サマリー"));
+                $hb.expectGET("/api/status?count=20").respond(createTodoItems(10, "タイトル", "サマリー"));
             });
             var scope = $rootScope.$new();
             var ctrl = $controller("tasklistCtrl", { $scope: scope });
