@@ -27,7 +27,7 @@
         </div>
 
         @* ### タスクリストコントローラー ### *@
-        <div style="overflow-y:scroll;height:580px;border:solid 1px black;" ng-controller="tasklistCtrl">
+        <div style="overflow-y:scroll;height:580px;border:solid 1px black;" ng-controller="tasklistCtrl" infinite-scroll='loadMore()' infinite-scroll-distance='2'>
             <ul>
                 <li ng-repeat="item in items" ng-click="showDetail($index)" class="regist-task-list-item">
                     @*ステータス(チェックボックスで表現)*@

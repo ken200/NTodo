@@ -42,6 +42,10 @@
             console.dir(error);
         });
 
+        $scope.loadMore = function () {
+            console.log("あああ");
+        };
+
         /**
         * タスクの期限切れ状態に応じたスタイルの取得
         *

@@ -29,6 +29,11 @@ namespace NTodo
             {
                 return View["Index", service.GetTodoItems(20,null)];
             };
+
+            Get["/scrolldemo"] = _ =>
+            {
+                return View["ScrollDemo"];
+            };
         }
     }
 

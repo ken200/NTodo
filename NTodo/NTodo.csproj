@@ -148,6 +148,7 @@
     <Content Include="Content\js\lib\angular\angular.min.js.map" />
     <Content Include="Content\js\lib\angular\errors.json" />
     <Content Include="Content\js\lib\angular\version.json" />
+    <Content Include="Views\Main\ScrollDemo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
