@@ -2,22 +2,30 @@
     Layout = "Shared/_Layout.cshtml";
 }
 
-<div ng-app='myApp' ng-controller='DemoController'>
+<div ng-app='myApp' ng-controller='DemoController' style="margin-top:50px;">
+    @*<div style="overflow-y:scroll;height:100px;border:solid 1px black;" infinite-scroll='loadMore()' infinite-scroll-distance='2'>*@
     <div infinite-scroll='loadMore()' infinite-scroll-distance='2'>
-        <img ng-repeat='image in images' ng-src='http://placehold.it/225x250&text={{image}}'>
+        <p ng-repeat="item in items">{{item.title}}</p>
     </div>
 </div>
 
 <script type="text/javascript">
     var myApp = angular.module('myApp', ['infinite-scroll']);
-    myApp.controller('DemoController', function ($scope) {
-        $scope.images = [1, 2, 3, 4, 5, 6, 7, 8];
-
+    myApp.factory("taskService", ["$http", function ($http) {
+        return new services.TaskService($http);
+    }]);
+    myApp.controller('DemoController', ["$scope", "taskService", function ($scope, taskService) {
+        $scope.items = [];
         $scope.loadMore = function () {
-            var last = $scope.images[$scope.images.length - 1];
-            for (var i = 1; i <= 8; i++) {
-                $scope.images.push(last + i);
-            }
+            var fromId = $scope.items.length === 0 ? undefined : $scope.items[$scope.items.length - 1].id;
+            taskService.getTaskList(5, fromId).success(function (data, code) {
+                for (var i = 0; i < data.length; i++) {
+                    $scope.items.push(data[i]);
+                }
+            }).error(function (error) {
+                alert("エラー");
+                console.dir(error);
+            });
         };
-    });
+    }]);
 </script>
