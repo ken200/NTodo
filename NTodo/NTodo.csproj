@@ -132,8 +132,10 @@
     <Content Include="Content\js\test\unit\limitInfosSpec.js" />
     <Content Include="Content\js\test\unit\sorterSpec.js" />
     <Content Include="Content\js\test\unit\taskListCtrlSpec.js" />
+    <Content Include="Content\js\test\unit\taskServicesSpec.js" />
     <Content Include="Content\js\utils.js" />
     <Content Include="Content\js\views.js" />
+    <Content Include="Content\js\autoload.js" />
     <Content Include="packages.config" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -149,6 +151,7 @@
     <Content Include="Content\js\lib\angular\errors.json" />
     <Content Include="Content\js\lib\angular\version.json" />
     <Content Include="Views\Main\ScrollDemo.cshtml" />
+    <Content Include="Views\Main\ScrollDemo2.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

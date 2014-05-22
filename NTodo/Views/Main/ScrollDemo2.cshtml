@@ -18,7 +18,7 @@
 </head>
 <body ng-app='myApp' ng-controller='DemoController'>
     <div style="background:black; color:white; height:30px; width:100%; position:fixed; top:0; left: 0;">
-        スクロールデモ1
+        スクロールデモ2
     </div>
     <style>
         #box {
@@ -29,13 +29,9 @@
         }
     </style>
 
-    <div ng-controller='DemoController' style="margin-top:50px;">
-        <div id="box">
-            <ul auto-load="getAutoLoadConfig()">
-                <li ng-repeat="item in listItems">{{item}}</li>
-            </ul>
-        </div>
-    </div>
+    <ul auto-load="getAutoLoadConfig()">
+        <li ng-repeat="item in listItems">{{item}}</li>
+    </ul>
 
     <script type="text/javascript">
         var myApp = angular.module('myApp', ['auto-load']);
@@ -46,18 +42,7 @@
                 var defer = $q.defer();
                 try {
                     var getDataCount = function () {
-                        if (totalCount >= 68)
-                            return 0;
-                        if (totalCount >= 67)
-                            return 1;
-                        if (totalCount >= 64)
-                            return 3;
-                        if (totalCount >= 59)
-                            return 5;
-                        if (totalCount >= 50)
-                            return 9;
-                        else
-                            return 10;
+                        return 100;
                     };
 
                     var datas = _.map(_.range(getDataCount()), function (i) { return "アイテム" + (totalCount++); });
@@ -70,9 +55,7 @@
 
             $scope.getAutoLoadConfig = function () {
                 return {
-                    box: "box",
-                    items: "listItems",
-                    loadMore: "loadMore()"
+                    items: "listItems"
                 }
             };
         }]);

@@ -34,6 +34,11 @@ namespace NTodo
             {
                 return View["ScrollDemo"];
             };
+
+            Get["/scrolldemo2"] = _ =>
+            {
+                return View["ScrollDemo2"];
+            };
         }
     }
 
