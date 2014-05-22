@@ -34,13 +34,17 @@
 
         var _allItems = [];
 
-        taskService.getAll().success(function (data, code) {
+        taskService.getTaskList(20).success(function (data, code) {
             _allItems = data;
             $scope.items = filters.execDefaultFilterAndSort(data);
         }).error(function (error) {
             alert("エラー");
             console.dir(error);
         });
+
+        $scope.loadMore = function () {
+            console.log("あああ");
+        };
 
         /**
         * タスクの期限切れ状態に応じたスタイルの取得

@@ -10,7 +10,13 @@ namespace NTodo
 {
     public interface INTodoService
     {
-        IEnumerable<TodoItem> GetTodoItems();
+        /// <summary>
+        /// Todoアイテムの取得
+        /// </summary>
+        /// <param name="count">取得するTodoアイテムレコード数</param>
+        /// <param name="id">取得開始の先頭ID。nullの場合は最新ID。</param>
+        /// <returns></returns>
+        IEnumerable<TodoItem> GetTodoItems(int count, string id);
         TodoItemDetail GetTodoDetail(int todoId);
         void AddComment(int todoId, string commentBody);
     }
@@ -24,10 +30,21 @@ namespace NTodo
             return new SqlConnection(conString);
         }
 
-        public IEnumerable<TodoItem> GetTodoItems()
+        public IEnumerable<TodoItem> GetTodoItems(int count, string id)
         {
+            var sql = String.Format(@"
+SELECT top {0} 
+id, 
+title, 
+finished, 
+limit, 
+detail 
+FROM todoitem 
+<WHERE>
+ORDER BY id".Replace("<WHERE>", string.IsNullOrEmpty(id) ? " " : " WHERE id <= @TODO_ID "), count);
+
             var con = CreateConnection();
-            return con.Query("select id, title, finished, limit, detail from todoitem order by id").Select((item) => 
+            return con.Query(sql, string.IsNullOrEmpty(id) ? null : new { TODO_ID = id }).Select((item) =>
             {
                 string detail = item.detail;
                 var summary = detail.Take(20).Aggregate<char, string>("", (memo, c) => memo + c);

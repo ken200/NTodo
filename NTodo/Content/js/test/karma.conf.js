@@ -9,7 +9,8 @@ module.exports = function(config){
       'lib/angular/angular-*.js',
       'lib/underscore/*.js',
       '*.js',
-      'test/unit/*.js'
+      //'test/unit/*.js'
+      'test/unit/taskServicesSpec.js'
     ],
 
     exclude: [

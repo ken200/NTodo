@@ -1,7 +1,8 @@
 ﻿@{
     Layout = "Shared/_Layout.cshtml";
 }
-
+<script src="content/js/main.js"></script>
+<link rel="stylesheet" href="content/css/main.css" />
 <div ng-app="myapp">
     <div style="float:left;width:1000px;height:650px;margin:10px 0 0 0;">
         <h2>タスク一覧</h2>
@@ -27,7 +28,7 @@
         </div>
 
         @* ### タスクリストコントローラー ### *@
-        <div style="overflow-y:scroll;height:580px;border:solid 1px black;" ng-controller="tasklistCtrl">
+        <div style="overflow-y:scroll;height:580px;border:solid 1px black;" ng-controller="tasklistCtrl" infinite-scroll='loadMore()' infinite-scroll-distance='2'>
             <ul>
                 <li ng-repeat="item in items" ng-click="showDetail($index)" class="regist-task-list-item">
                     @*ステータス(チェックボックスで表現)*@

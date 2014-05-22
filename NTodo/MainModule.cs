@@ -27,7 +27,17 @@ namespace NTodo
 
             Get["/"] = _ =>
             {
-                return View["Index", service.GetTodoItems()];
+                return View["Index", service.GetTodoItems(20,null)];
+            };
+
+            Get["/scrolldemo"] = _ =>
+            {
+                return View["ScrollDemo"];
+            };
+
+            Get["/scrolldemo2"] = _ =>
+            {
+                return View["ScrollDemo2"];
             };
         }
     }
@@ -36,10 +46,12 @@ namespace NTodo
     {
         public ApiModule(INTodoService service) : base("/api")
         {
-            Get["status/all"] = _ =>
+            Get["status"] = _ =>
             {
-                int top = 100;  //todo:パラメーター指定できるようにする
-                return Response.AsJson<IEnumerable<TodoItem>>(service.GetTodoItems().Take(top), HttpStatusCode.OK);
+                string rawCount = this.Request.Query.count;
+                int count = string.IsNullOrEmpty(rawCount) ? 100 : Convert.ToInt32(rawCount);
+                string id = this.Request.Query.id;
+                return Response.AsJson<IEnumerable<TodoItem>>(service.GetTodoItems(count, id), HttpStatusCode.OK);
             };
 
             Get["status/{id:int}"] = p =>
